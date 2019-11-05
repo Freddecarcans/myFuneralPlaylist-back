@@ -3,10 +3,11 @@ const express = require('express');
 const httpErrors = require('http-errors');
 const logger = require('morgan');
 const path = require('path');
-const passport = require('passport');
+// const passport = require('passport');
 
 const index = require('./routes/index');
 const auth = require('./routes/auth');
+const users = require('./routes/users');
 
 const app = express();
 
@@ -19,11 +20,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api', index);
 app.use('/api/auth', auth);
-app.get('/api/profile', passport.authenticate('jwt', { session: false }), (req, res) => {
-  res.send(req.user);
-});
+app.use('/api/users', users);
+// app.get('/api/profile', passport.authenticate('jwt', { session: false }), (req, res) => {
+//   res.send(req.user);
+// });
 
-// app.use('/', index);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

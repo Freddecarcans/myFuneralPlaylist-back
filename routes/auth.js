@@ -32,7 +32,7 @@ passport.use('local', new LocalStrategy(
         }
         // si utilisateur ok on retourne l'objet user
 
-        return done(null, { id: user[0].id, email: user[0].email });
+        return done(null, { id: user[0].id, email: user[0].email, username: user[0].username });
       }
     );
   })
@@ -76,7 +76,9 @@ router.post('/signin', (req, res) => {
       return res.status(401).json({ message: info.message });
     }
     const token = jwt.sign(user, 'myfuneralplaylist');
-    return res.json({ user, token });
+    return res.json({
+      username: user.username, token, iduser: user.id, email: user.email
+    });
   })(req, res);
 });
 

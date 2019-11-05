@@ -2,7 +2,6 @@ const { Router } = require('express');
 
 const router = Router();
 const bodyParser = require('body-parser');
-// const connection = require('./conf');
 
 
 router.use(bodyParser.json());
