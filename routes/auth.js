@@ -32,7 +32,7 @@ passport.use('local', new LocalStrategy(
         }
         // si utilisateur ok on retourne l'objet user
 
-        return done(null, { id: user[0].id, email: user[0].email, username: user[0].username });
+        return done(null, { iduser: user[0].iduser, email: user[0].email, username: user[0].username });
       }
     );
   })
@@ -77,9 +77,19 @@ router.post('/signin', (req, res) => {
     }
     const token = jwt.sign(user, 'myfuneralplaylist');
     return res.json({
-      username: user.username, token, iduser: user.id, email: user.email
+      username: user.username, token, iduser: user.iduser, email: user.email
     });
   })(req, res);
+});
+
+router.get('/email/:email', (req, res) => {
+  const { email } = req.params;
+  connection.query('SELECT iduser, username FROM users WHERE email = ?', email, (err, results) => {
+    if (err) {
+      res.sendStatus(500);
+    }
+    res.json(results);
+  });
 });
 
 module.exports = router;
