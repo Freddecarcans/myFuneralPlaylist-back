@@ -58,15 +58,28 @@ router.get('/:id/contact', (req, res) => {
   });
 });
 // en tant qu'utilisateur je veux enregistrer mes contacts
-router.post('/:id/contact', (req, res) => {
+router.put('/:id/contact', (req, res) => {
   const { id } = req.params;
   const form = req.body;
-  connection.query(`INSERT INTO users SET ? WHERE iduser = ${id}`, [id, form], (err) => {
+
+  connection.query('UPDATE users SET ? WHERE iduser = ?', [form, id], (err) => {
     if (err) {
       res.sendStatus(500);
     }
     res.sendStatus(201);
   });
+});
+
+// en tant qu'utilisateur, je veux pouvoir modifier une playlist.
+router.put('/playlists/:id', (req, res) => {
+  const { id } = req.params;
+  const form = req.body;
+  connection.query('UPDATE playlist SET ? WHERE id = ?', [form, id], (err) => {
+    if (err) {
+      res.sendStatus(500);
+    }
+    res.sendStatus(201);
+  })
 });
 
 module.exports = router;
