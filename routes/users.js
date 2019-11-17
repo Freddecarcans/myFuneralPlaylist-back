@@ -79,7 +79,7 @@ router.put('/playlists/:id', (req, res) => {
       res.sendStatus(500);
     }
     res.sendStatus(201);
-  })
+  });
 });
 
 module.exports = router;
