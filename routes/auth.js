@@ -84,7 +84,7 @@ router.post('/signin', (req, res) => {
 
 router.get('/email/:email', (req, res) => {
   const { email } = req.params;
-  connection.query('SELECT iduser, username FROM users WHERE email = ?', email, (err, results) => {
+  connection.query('SELECT iduser FROM users WHERE email = ?', email, (err, results) => {
     if (err) {
       res.sendStatus(500);
     }
