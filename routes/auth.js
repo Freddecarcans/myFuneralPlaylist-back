@@ -1,4 +1,3 @@
-
 const express = require('express');
 const passport = require('passport');
 const bcrypt = require('bcrypt');
@@ -7,7 +6,6 @@ const LocalStrategy = require('passport-local').Strategy;
 const bodyParser = require('body-parser');
 const { ExtractJwt } = require('passport-jwt');
 const JwtStrategy = require('passport-jwt').Strategy;
-
 const connection = require('../helpers/conf');
 
 const router = express.Router();
@@ -15,7 +13,6 @@ router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
 // Route avec verification mot de passe
-
 passport.use('local', new LocalStrategy(
   {
     usernameField: 'email',
@@ -26,13 +23,11 @@ passport.use('local', new LocalStrategy(
       `SELECT * FROM users WHERE email = '${email}'`,
       (err, user) => {
         // si une erreur est obtenue
-
         if (!bcrypt.compareSync(password, user[0].password, 10)) {
           return done(null, false, { message: 'Incorrect username or password' });
         }
         // si utilisateur ok on retourne l'objet user
-
-        return done(null, { iduser: user[0].iduser, email: user[0].email, username: user[0].username });
+        return done(null, { iduser: user[0].iduser, email: user[0].email, token: user[0].token });
       }
     );
   })
@@ -50,7 +45,6 @@ passport.use(
 );
 
 // route enregistrement et cryptage mot de passe
-
 router.post('/signup', (req, res) => {
   const user = {
     ...req.body,
@@ -66,7 +60,6 @@ router.post('/signup', (req, res) => {
 });
 
 // Route connexion avec authentification
-
 router.post('/signin', (req, res) => {
   passport.authenticate('local', (err, user, info) => {
     if (err) {
@@ -82,6 +75,7 @@ router.post('/signin', (req, res) => {
   })(req, res);
 });
 
+// Route vérification email existant
 router.get('/email/:email', (req, res) => {
   const { email } = req.params;
   connection.query('SELECT iduser FROM users WHERE email = ?', email, (err, results) => {
