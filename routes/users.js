@@ -39,7 +39,7 @@ router.get('/:id', (req, res) => {
   });
 });
 
-// en tant qu'utilisateur, je veux créer et affecter un morceau à une playlist.
+// en tant qu'utilisateur, je veux créer et affecter un morceau à ma playlist.
 router.post('/title', (req, res) => {
   const form = req.body;
   connection.query('INSERT INTO titles SET ?', form, (err) => {
@@ -78,6 +78,18 @@ router.put('/playlists/:id', (req, res) => {
   const { id } = req.params;
   const form = req.body;
   connection.query('UPDATE playlist SET ? WHERE id = ?', [form, id], (err) => {
+    if (err) {
+      res.sendStatus(500);
+    }
+    res.sendStatus(201);
+  });
+});
+
+// en tant qu'utilisateur, je veux modifier mon compte
+router.put('/account/:id', (req, res) => {
+  const { id } = req.params;
+  const form = req.body;
+  connection.query('UPDATE users SET ? WHERE iduser = ?', [form, id], (err) => {
     if (err) {
       res.sendStatus(500);
     }
