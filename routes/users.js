@@ -31,7 +31,7 @@ router.delete('/:idUser/tracks/:idTitle', (req, res) => {
 // en tant qu'utilisateur je veux pouvoir consulter mon compte
 router.get('/:id', (req, res) => {
   const { id } = req.params;
-  connection.query('SELECT name, firstname, email, contactA, contactB, iduser FROM users WHERE iduser = ?', [id], (err, results) => {
+  connection.query('SELECT * FROM users WHERE iduser = ?', [id], (err, results) => {
     if (err) {
       res.sendStatus(500);
     }
@@ -53,7 +53,7 @@ router.post('/title', (req, res) => {
 // en tant qu'utilisateur je veux consulter mes contacts
 router.get('/:id/contact', (req, res) => {
   const { id } = req.params;
-  connection.query('SELECT contactA, contactB FROM users WHERE iduser = ?', id, (err, results) => {
+  connection.query('SELECT contactA, contactAName, contactAFirstName, contactB, contactBName, contactBFirstName FROM users WHERE iduser = ?', id, (err, results) => {
     if (err) {
       res.sendStatus(500);
     }
