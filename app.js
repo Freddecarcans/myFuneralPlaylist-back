@@ -3,8 +3,7 @@ const express = require('express');
 const httpErrors = require('http-errors');
 const logger = require('morgan');
 const path = require('path');
-// const passport = require('passport');
-
+const cors = require('cors');
 const index = require('./routes/index');
 const auth = require('./routes/auth');
 const users = require('./routes/users');
@@ -15,15 +14,13 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(cors());
 
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api', index);
 app.use('/api/auth', auth);
 app.use('/api/users', users);
-// app.get('/api/profile', passport.authenticate('jwt', { session: false }), (req, res) => {
-//   res.send(req.user);
-// });
 
 
 // catch 404 and forward to error handler

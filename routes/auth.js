@@ -12,7 +12,7 @@ const router = express.Router();
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
-// Route avec verification mot de passe
+// middleware avec verification mot de passe
 passport.use('local', new LocalStrategy(
   {
     usernameField: 'email',
@@ -38,7 +38,7 @@ passport.use(
   new JwtStrategy(
     {
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: 'plop',
+      secretOrKey: 'pass',
     },
     ((jwtPayload, cb) => cb(null, jwtPayload))
   )
@@ -68,7 +68,7 @@ router.post('/signin', (req, res) => {
     if (!user) {
       return res.status(401).json({ message: info.message });
     }
-    const token = jwt.sign(user, 'myfuneralplaylist');
+    const token = jwt.sign(user, 'jwt', { expiresIn: '1h' });
     return res.json({
       username: user.username, token, iduser: user.iduser, email: user.email
     });
@@ -85,5 +85,8 @@ router.get('/email/:email', (req, res) => {
     res.json(results);
   });
 });
+// router.get('/profile', passport.authenticate('jwt', { session: false }), (req, res) => {
+//   res.json(req.user);
+// });
 
 module.exports = router;
