@@ -46,7 +46,6 @@ router.delete('/tracks/:idTitle', passport.authenticate('jwt', { session: false 
 });
 
 // en tant qu'utilisateur je veux pouvoir consulter mon compte
-// router.get('/profile/:id', (req, res) => {
 router.get('/profile/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
   const { id } = req.params;
   connection.query('SELECT * FROM users WHERE iduser = ?', [id], (err, results) => {
