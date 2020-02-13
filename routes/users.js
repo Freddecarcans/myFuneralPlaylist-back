@@ -24,8 +24,8 @@ passport.use(
 
 
 // en tant qu'utilisateur, je veux pouvoir consulter ma playlist
-router.get('/tracks/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
-  const { id } = req.params;
+router.get('/tracks', passport.authenticate('jwt', { session: false }), (req, res) => {
+  const { id } = req.headers;
   connection.query('SELECT idtitle, title, artist FROM titles WHERE user_id = ?', id, (err, results) => {
     if (err) {
       res.sendStatus(500);
@@ -35,9 +35,9 @@ router.get('/tracks/:id', passport.authenticate('jwt', { session: false }), (req
 });
 
 // en tant qu'utilisateur, je veux pouvoir supprimer un morceau de ma playlist
-router.delete('/tracks/:idTitle', passport.authenticate('jwt', { session: false }), (req, res) => {
-  const { idTitle } = req.params;
-  connection.query('DELETE FROM titles WHERE idtitle = ?', [idTitle], (err) => {
+router.delete('/deltracks', passport.authenticate('jwt', { session: false }), (req, res) => {
+  const { idtitle } = req.headers;
+  connection.query('DELETE FROM titles WHERE idtitle = ?', [idtitle], (err) => {
     if (err) {
       res.sendStatus(500);
     }
@@ -46,8 +46,8 @@ router.delete('/tracks/:idTitle', passport.authenticate('jwt', { session: false 
 });
 
 // en tant qu'utilisateur je veux pouvoir consulter mon compte
-router.get('/profile/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
-  const { id } = req.params;
+router.get('/profile', passport.authenticate('jwt', { session: false }), (req, res) => {
+  const { id } = req.headers;
   connection.query('SELECT * FROM users WHERE iduser = ?', [id], (err, results) => {
     if (err) {
       res.sendStatus(500);
@@ -68,8 +68,8 @@ router.post('/title', passport.authenticate('jwt', { session: false }), (req, re
 });
 
 // en tant qu'utilisateur je veux consulter mes contacts
-router.get('/contacts/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
-  const { id } = req.params;
+router.get('/contacts', passport.authenticate('jwt', { session: false }), (req, res) => {
+  const { id } = req.headers;
   connection.query('SELECT contactA, contactAName, contactAFirstName, contactB, contactBName, contactBFirstName FROM users WHERE iduser = ?', id, (err, results) => {
     if (err) {
       res.sendStatus(500);
@@ -79,8 +79,8 @@ router.get('/contacts/:id', passport.authenticate('jwt', { session: false }), (r
 });
 
 // en tant qu'utilisateur je veux enregistrer mes contacts
-router.put('/contacts/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
-  const { id } = req.params;
+router.put('/addcontacts', passport.authenticate('jwt', { session: false }), (req, res) => {
+  const { id } = req.headers;
   const form = req.body;
   connection.query('UPDATE users SET ? WHERE iduser = ?', [form, id], (err) => {
     if (err) {
@@ -91,8 +91,8 @@ router.put('/contacts/:id', passport.authenticate('jwt', { session: false }), (r
 });
 
 // en tant qu'utilisateur, je veux pouvoir modifier une playlist.
-router.put('/playlists/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
-  const { id } = req.params;
+router.put('/playlist', passport.authenticate('jwt', { session: false }), (req, res) => {
+  const { id } = req.headers;
   const form = req.body;
   connection.query('UPDATE playlist SET ? WHERE id = ?', [form, id], (err) => {
     if (err) {
@@ -103,8 +103,8 @@ router.put('/playlists/:id', passport.authenticate('jwt', { session: false }), (
 });
 
 // en tant qu'utilisateur, je veux modifier mon compte
-router.put('/account/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
-  const { id } = req.params;
+router.put('/account', passport.authenticate('jwt', { session: false }), (req, res) => {
+  const { id } = req.headers;
   const form = req.body;
   connection.query('UPDATE users SET ? WHERE iduser = ?', [form, id], (err) => {
     if (err) {
